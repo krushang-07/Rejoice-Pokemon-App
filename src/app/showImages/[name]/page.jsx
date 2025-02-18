@@ -1,14 +1,19 @@
 "use client";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Box, Typography, Grid, Card, CardContent } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CircularProgress,
+} from "@mui/material";
 import Image from "next/image";
-import Loader from "@/utiles/Loader";
 
 const ShowImages = () => {
-  const searchParams = useSearchParams();
-  const name = searchParams.get("name");
+  const { name } = useParams();
   const [images, setImages] = useState(null);
 
   useEffect(() => {
@@ -17,24 +22,32 @@ const ShowImages = () => {
         const response = await axios.get(
           `https://pokeapi.co/api/v2/pokemon/${name}`
         );
-        console.log(response.data);
+
         setImages(response.data.sprites);
       } catch (error) {
         console.error("Error fetching Pokémon images:", error);
       }
     };
 
-    if (name) {
-      fetchPokemonImages();
-    }
+    fetchPokemonImages();
   }, [name]);
 
-  if (!images) return <Loader />;
+  if (!images)
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress size={80} color="primary" />
+      </Box>
+    );
 
   return (
     <Box p={4} textAlign="center">
       <Typography variant="h3" mb={4}>
-        {name.toUpperCase()} Images
+        {name} Images
       </Typography>
       <Grid container spacing={3} justifyContent="center">
         {Object.entries(images).map(
@@ -44,9 +57,13 @@ const ShowImages = () => {
               <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
                 <Card>
                   <CardContent>
-                    <Image src={value} alt={key} width={200} height={200} />
-                    <Typography variant="body2" mt={2}>
-                      {key}
+                    <Image src={value} alt={key} width={400} height={400} />
+                    <Typography
+                      variant="body2"
+                      sx={{ fontSize: "20px" }}
+                      mt={2}
+                    >
+                      {key.toUpperCase()}
                     </Typography>
                   </CardContent>
                 </Card>

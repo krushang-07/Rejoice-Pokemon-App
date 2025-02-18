@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import {
@@ -10,11 +10,12 @@ import {
   CardContent,
   Pagination,
   Button,
+  TextField,
 } from "@mui/material";
 import { keyframes } from "@emotion/react";
-import Loader from "@/utiles/Loader";
 import { useRouter } from "next/navigation";
 import useFetch from "@/hooks/useFetch";
+import { debounce } from "lodash";
 
 const fadeIn = keyframes`
   from {
@@ -30,68 +31,82 @@ const fadeIn = keyframes`
 const PokList = () => {
   const [pokemonDetails, setPokemonDetails] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const itemsPerPage = 12;
   const router = useRouter();
 
-  const {
-    data: pokemonData,
-    loading,
-    error,
-  } = useFetch(
+  const { data: pokemonData, error } = useFetch(
     `https://pokeapi.co/api/v2/pokemon/?offset=${
       (currentPage - 1) * itemsPerPage
     }&limit=${itemsPerPage}`
   );
 
   useEffect(() => {
-    const fetchAllPokemonDetails = async () => {
-      const details = {};
-      for (const pokemon of pokemonData?.results || []) {
-        try {
-          const response = await axios.get(pokemon.url);
-          details[pokemon.name] = {
-            abilities: response.data.abilities,
-            types: response.data.types,
-            image:
-              response.data.sprites.other?.dream_world?.front_default ||
-              response.data.sprites.front_default,
-            height: response.data.height,
-            moves: response.data.moves.map((move) => move.move.name),
-            movesDetail: response.data.moves.map((move) => move.move.url),
-          };
-        } catch (error) {
-          console.error("Error fetching Pokémon details:", error);
-        }
-      }
-      setPokemonDetails(details);
-    };
-
     if (pokemonData) {
+      const fetchAllPokemonDetails = async () => {
+        const details = {};
+        for (const pokemon of pokemonData?.results || []) {
+          try {
+            const response = await axios.get(pokemon.url);
+            details[pokemon.name] = {
+              image:
+                response.data.sprites.other?.dream_world?.front_default ||
+                response.data.sprites.front_default,
+            };
+          } catch (error) {
+            console.error("Error fetching Pokémon details:", error);
+          }
+        }
+        setPokemonDetails(details);
+      };
+
       fetchAllPokemonDetails();
     }
   }, [pokemonData]);
 
-  const handleMoveSelection = (moveUrl) => {
-    router.push(`/moveDetails?url=${encodeURIComponent(moveUrl)}`);
-  };
-
   const handleShowAllImages = (pokemonName) => {
-    router.push(`/showImages?name=${encodeURIComponent(pokemonName)}`);
+    router.push(`/showImages/${encodeURIComponent(pokemonName)}`);
   };
 
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
 
-  if (loading) return <Loader />;
+  const handleCardClick = (pokemonName) => {
+    router.push(`/pokCardDetail/${encodeURIComponent(pokemonName)}`);
+  };
+
+  const debouncedSearch = useRef(
+    debounce((query) => {
+      setSearchQuery(query.toLowerCase());
+    }, 500)
+  ).current;
+
+  const handleSearchChange = (event) => {
+    debouncedSearch(event.target.value);
+  };
+
+  const filteredPokemon = pokemonData?.results.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(searchQuery)
+  );
+
   if (error) return <Typography>Error loading data</Typography>;
 
   return (
     <>
+      <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
+        <TextField
+          label="Search Pokémon"
+          variant="outlined"
+          onChange={handleSearchChange}
+          fullWidth
+        />
+      </Box>
       <Grid container spacing={3} justifyContent="center">
-        {pokemonData?.results.map((pokemon, index) => (
+        {filteredPokemon?.map((pokemon, index) => (
           <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
             <Card
+              onClick={() => handleCardClick(pokemon.name)}
               sx={{
                 height: "100%",
                 display: "flex",
@@ -102,6 +117,7 @@ const PokList = () => {
                   boxShadow: "0 12px 24px rgba(0, 0, 0, 0.15)",
                 },
                 animation: `${fadeIn} 0.5s ease-in-out ${index * 0.1}s`,
+                cursor: "pointer",
               }}
             >
               {pokemonDetails[pokemon.name]?.image && (
@@ -139,58 +155,13 @@ const PokList = () => {
                 >
                   {pokemon.name}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Height: {pokemonDetails[pokemon.name]?.height}
-                </Typography>
-                <Typography variant="subtitle2" mt={1} color="primary">
-                  Abilities:
-                </Typography>
-                <Box component="ul" sx={{ pl: 2, mt: 0 }}>
-                  {pokemonDetails[pokemon.name]?.abilities.map(
-                    (ability, idx) => (
-                      <Typography key={idx} component="li" variant="body2">
-                        {ability.ability.name}
-                      </Typography>
-                    )
-                  )}
-                </Box>
-                <Typography variant="subtitle2" mt={1} color="secondary">
-                  Types:
-                </Typography>
-                <Box component="ul" sx={{ pl: 2, mt: 0 }}>
-                  {pokemonDetails[pokemon.name]?.types.map((type, idx) => (
-                    <Typography key={idx} component="li" variant="body2">
-                      {type.type.name}
-                    </Typography>
-                  ))}
-                </Box>
-                <Typography variant="subtitle2" mt={1} color="error">
-                  Moves:
-                </Typography>
-                <select
-                  onChange={(e) => handleMoveSelection(e.target.value)}
-                  style={{
-                    padding: "8px",
-                    borderRadius: "4px",
-                    border: "1px solid #ccc",
-                    marginTop: "8px",
-                    width: "100%",
-                    fontFamily: "inherit",
-                  }}
-                >
-                  <option value="">Select a move</option>
-                  {pokemonDetails[pokemon.name]?.movesDetail
-                    .map((moveUrl, idx) => (
-                      <option key={idx} value={moveUrl}>
-                        {pokemonDetails[pokemon.name]?.moves[idx]}
-                      </option>
-                    ))
-                    .slice(0, 5)}
-                </select>
                 <Button
                   variant="contained"
                   color="primary"
-                  onClick={() => handleShowAllImages(pokemon.name)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleShowAllImages(pokemon.name);
+                  }}
                   sx={{ mt: 2 }}
                 >
                   Show All Images

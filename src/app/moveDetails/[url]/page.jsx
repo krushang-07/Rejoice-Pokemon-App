@@ -1,13 +1,17 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useParams } from "next/navigation";
 import axios from "axios";
-import { Box, Typography, Card, CardContent } from "@mui/material";
-import Loader from "@/utiles/Loader";
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  CircularProgress,
+} from "@mui/material";
 
 const MoveDetails = () => {
-  const router = useRouter();
-  const { url } = router.query;
+  const { url } = useParams();
   const [moveDetails, setMoveDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,7 +20,7 @@ const MoveDetails = () => {
     if (url) {
       const fetchMoveDetails = async () => {
         try {
-          const response = await axios.get(url);
+          const response = await axios.get(decodeURIComponent(url));
           setMoveDetails(response.data);
         } catch (error) {
           setError(error.message);
@@ -25,11 +29,21 @@ const MoveDetails = () => {
         }
       };
       fetchMoveDetails();
-      // console.log(moveDetails);
     }
   }, [url]);
 
-  if (loading) return <Loader />;
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress size={80} color="primary" />
+      </Box>
+    );
+  }
   if (error)
     return (
       <Typography color="error" variant="h6" align="center">
