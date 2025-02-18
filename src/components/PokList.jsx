@@ -14,6 +14,7 @@ import {
 import { keyframes } from "@emotion/react";
 import Loader from "@/utiles/Loader";
 import { useRouter } from "next/navigation";
+import useFetch from "@/hooks/useFetch";
 
 const fadeIn = keyframes`
   from {
@@ -29,26 +30,18 @@ const fadeIn = keyframes`
 const PokList = () => {
   const [pokemonDetails, setPokemonDetails] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-  const [pokemonData, setPokemonData] = useState(null);
   const itemsPerPage = 12;
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchPokemonData = async () => {
-      try {
-        const response = await axios.get(
-          `https://pokeapi.co/api/v2/pokemon/?offset=${
-            (currentPage - 1) * itemsPerPage
-          }&limit=${itemsPerPage}`
-        );
-        setPokemonData(response.data);
-      } catch (error) {
-        console.error("Error fetching Pokémon data:", error);
-      }
-    };
-
-    fetchPokemonData();
-  }, [currentPage]);
+  const {
+    data: pokemonData,
+    loading,
+    error,
+  } = useFetch(
+    `https://pokeapi.co/api/v2/pokemon/?offset=${
+      (currentPage - 1) * itemsPerPage
+    }&limit=${itemsPerPage}`
+  );
 
   useEffect(() => {
     const fetchAllPokemonDetails = async () => {
@@ -56,7 +49,6 @@ const PokList = () => {
       for (const pokemon of pokemonData?.results || []) {
         try {
           const response = await axios.get(pokemon.url);
-          console.log(response.data);
           details[pokemon.name] = {
             abilities: response.data.abilities,
             types: response.data.types,
@@ -91,7 +83,8 @@ const PokList = () => {
     setCurrentPage(value);
   };
 
-  if (!pokemonData) return <Loader />;
+  if (loading) return <Loader />;
+  if (error) return <Typography>Error loading data</Typography>;
 
   return (
     <>

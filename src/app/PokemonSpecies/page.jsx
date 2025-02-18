@@ -1,4 +1,5 @@
-import PokSpecies from "@/components/PokSpecies";
+import dynamic from "next/dynamic";
+const PokSpecies = dynamic(() => import("@/components/PokSpecies"));
 import { Box, Typography } from "@mui/material";
 import React from "react";
 

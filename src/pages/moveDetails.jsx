@@ -25,7 +25,7 @@ const MoveDetails = () => {
         }
       };
       fetchMoveDetails();
-      console.log(moveDetails);
+      // console.log(moveDetails);
     }
   }, [url]);
 
