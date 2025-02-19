@@ -3,11 +3,14 @@ import useFetch from "@/hooks/useFetch";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, Card, CardContent } from "@mui/material";
+import Loader from "@/app/pokemon/loading";
 
 const PokSpecies = () => {
-  const { data: pokemonSpecies, error } = useFetch(
-    "https://pokeapi.co/api/v2/pokemon-species"
-  );
+  const {
+    data: pokemonSpecies,
+    error,
+    loading,
+  } = useFetch("https://pokeapi.co/api/v2/pokemon-species");
   const [pokemonSpeciesDetails, setPokemonSpeciesDetails] = useState({});
 
   useEffect(() => {
@@ -38,7 +41,7 @@ const PokSpecies = () => {
   }, [pokemonSpecies]);
 
   if (error) return <Typography color="error">{error.message}</Typography>;
-
+  if (loading) return <Loader />;
   return (
     <Box
       display="flex"
