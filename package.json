@@ -15,8 +15,10 @@
     "axios": "^1.7.9",
     "lodash": "^4.17.21",
     "next": "15.1.7",
+    "openai": "^4.85.2",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-i18next": "^13.2.2"
   },
   "devDependencies": {
     "postcss": "^8",

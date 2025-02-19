@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 const PokSpecies = dynamic(() => import("@/components/PokSpecies"));
 import { Box, Typography } from "@mui/material";
 import React, { Suspense } from "react";
-import Loader from "../loader";
+import Loader from "./loading";
 
 const page = () => {
   return (

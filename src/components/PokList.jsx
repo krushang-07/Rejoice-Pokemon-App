@@ -65,7 +65,7 @@ const PokList = () => {
   }, [pokemonData]);
 
   const handleShowAllImages = (pokemonName) => {
-    router.push(`/showImages/${encodeURIComponent(pokemonName)}`);
+    router.push(`/show-images/${encodeURIComponent(pokemonName)}`);
   };
 
   const handlePageChange = (event, value) => {
@@ -73,7 +73,7 @@ const PokList = () => {
   };
 
   const handleCardClick = (pokemonName) => {
-    router.push(`/pokCardDetail/${encodeURIComponent(pokemonName)}`);
+    router.push(`/pok-card-detail/${encodeURIComponent(pokemonName)}`);
   };
 
   const debouncedSearch = useRef(
@@ -126,7 +126,8 @@ const PokList = () => {
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
-                    height: 200,
+                    height: "100%",
+                    width: "100%",
                     backgroundColor: "rgba(0, 0, 0, 0.03)",
                     borderRadius: "16px 16px 0 0",
                     padding: 2,
@@ -137,9 +138,14 @@ const PokList = () => {
                       pokemonDetails[pokemon.name]?.image || "/placeholder.svg"
                     }
                     alt={pokemon.name}
-                    width={150}
-                    height={150}
-                    style={{ objectFit: "contain" }}
+                    width={50}
+                    height={50}
+                    style={{
+                      width: "100%",
+                      height: "auto",
+                      objectFit: "contain",
+                    }}
+                    priority
                   />
                 </Box>
               )}

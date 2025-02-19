@@ -1,3 +1,4 @@
+import PokCardDetail from "../../../components/PokeCardDetails";
 export async function generateMetadata({ params }) {
   const { pokemonName } = await Promise.resolve(params);
   const decodedPokemonName = decodeURIComponent(pokemonName);
@@ -23,4 +24,9 @@ export async function generateMetadata({ params }) {
       description: "Could not find the requested Pokemon.",
     };
   }
+}
+
+export default async function PokemonPage({ params }) {
+  const { pokemonName } = await Promise.resolve(params);
+  return <PokCardDetail pokemonName={pokemonName} />;
 }

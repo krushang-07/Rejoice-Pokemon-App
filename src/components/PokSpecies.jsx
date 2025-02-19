@@ -1,6 +1,5 @@
 "use client";
 import useFetch from "@/hooks/useFetch";
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, Card, CardContent } from "@mui/material";
@@ -13,6 +12,10 @@ const PokSpecies = () => {
 
   useEffect(() => {
     const fetchAllPokemonDetails = async () => {
+      if (!pokemonSpecies || !pokemonSpecies.results) {
+        return <Typography>Loading Pokémon species...</Typography>;
+      }
+
       const details = {};
       for (const pokemon of pokemonSpecies.results) {
         try {
@@ -31,9 +34,7 @@ const PokSpecies = () => {
       setPokemonSpeciesDetails(details);
     };
 
-    if (pokemonSpecies?.results) {
-      fetchAllPokemonDetails();
-    }
+    fetchAllPokemonDetails();
   }, [pokemonSpecies]);
 
   if (error) return <Typography color="error">{error.message}</Typography>;

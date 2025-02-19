@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { Box, Typography } from "@mui/material";
 import React, { Suspense } from "react";
-import Loader from "../loader";
+import Loader from "./loading";
 const PokList = dynamic(() => import("@/components/PokList"));
 
 const page = () => {

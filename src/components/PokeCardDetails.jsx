@@ -29,20 +29,15 @@ const typeColors = {
 
 const PokCardDetail = ({ pokemonName }) => {
   const [pokemonDetails, setPokemonDetails] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const router = useRouter();
 
   const handleMoveSelection = (moveUrl) => {
-    router.push(`/moveDetails/${encodeURIComponent(moveUrl)}`);
+    router.push(`/move-details/${encodeURIComponent(moveUrl)}`);
   };
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
       if (!pokemonName) return;
-
-      setLoading(true);
-      setError(null);
 
       try {
         const response = await axios.get(
@@ -59,64 +54,11 @@ const PokCardDetail = ({ pokemonName }) => {
           stats: response.data.stats,
         });
       } catch (error) {
-        setError(
-          error.response?.status === 404
-            ? "Pokemon not found"
-            : "Failed to load Pokemon details"
-        );
-      } finally {
-        setLoading(false);
+        console.log(error);
       }
     };
     fetchPokemonDetails();
   }, [pokemonName]);
-
-  if (error) {
-    return (
-      <div className="container mx-auto p-4">
-        <div className="bg-gray-50 border-l-4 border-gray-900 p-4 rounded">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <svg
-                className="h-5 w-5 text-gray-900"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-gray-900">{error}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (loading) {
-    return (
-      <div className="container mx-auto p-4">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="animate-pulse">
-            <div className="h-16 bg-gray-100"></div>
-            <div className="p-4">
-              <div className="h-64 bg-gray-100 rounded-full max-w-xs mx-auto"></div>
-              <div className="space-y-3 mt-4">
-                <div className="h-4 bg-gray-100 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-100 rounded"></div>
-                <div className="h-4 bg-gray-100 rounded w-5/6"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (!pokemonDetails) return null;
 
