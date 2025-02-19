@@ -1,8 +1,22 @@
+# Pokemon App
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -18,7 +32,34 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Project Structure
+
+The project structure is as follows:
+
+```
+/D:/Rejoice/TS/pokemon-app
+├── app
+│   ├── page.js
+│   └── ...other files
+├── components
+│   ├── PokemonList.js
+│   └── ...other components
+├── public
+│   └── ...static files
+├── styles
+│   └── ...CSS files
+├── pages
+│   └── api
+│       └── ...API routes
+└── ...other files
+```
+
+## Features
+
+- **Pokemon List**: Displays a list of Pokemon fetched from an API.
+- **Pokemon Details**: Shows detailed information about a selected Pokemon.
+- **Search Functionality**: Allows users to search for specific Pokemon.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
 
 ## Learn More
 
