@@ -9,7 +9,6 @@ const Loader = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
-        backgroundColor: "white",
         gap: 2,
       }}
     >
@@ -19,7 +18,7 @@ const Loader = () => {
         color="textSecondary"
         sx={{ color: "text.secondary" }}
       >
-        Loading, please wait...
+        pokemon Detail is Loading Please Wait...
       </Typography>
     </Box>
   );

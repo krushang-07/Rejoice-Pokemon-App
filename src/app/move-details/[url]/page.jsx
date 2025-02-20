@@ -18,7 +18,7 @@ const MoveDetails = async ({ params }) => {
   if (!moveDetails) return notFound();
 
   return (
-    <Box p={4} textAlign="center" bgcolor="white" minHeight="100vh">
+    <Box p={4} textAlign="center">
       <Typography variant="h4" mb={4} sx={{ color: "black" }} fontWeight="bold">
         Move Details
       </Typography>
