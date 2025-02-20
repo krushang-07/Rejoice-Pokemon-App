@@ -163,12 +163,11 @@ const PokList = () => {
                 </Typography>
                 <Button
                   variant="contained"
-                  color="primary"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleShowAllImages(pokemon.name);
                   }}
-                  sx={{ mt: 2 }}
+                  sx={{ mt: 2, color: "white", bgcolor: "black" }}
                 >
                   Show All Images
                 </Button>
@@ -182,7 +181,7 @@ const PokList = () => {
           count={Math.ceil(pokemonData?.count / itemsPerPage)}
           page={currentPage}
           onChange={handlePageChange}
-          color="primary"
+          sx={{ color: "black" }}
           size="large"
         />
       </Box>

@@ -1,23 +1,28 @@
-import React from "react";
+import { CircularProgress, Box, Typography } from "@mui/material";
 
-const loading = () => {
+const Loader = () => {
   return (
-    <div className="container mx-auto p-4">
-      <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div className="animate-pulse">
-          <div className="h-16 bg-gray-100"></div>
-          <div className="p-4">
-            <div className="h-64 bg-gray-100 rounded-full max-w-xs mx-auto"></div>
-            <div className="space-y-3 mt-4">
-              <div className="h-4 bg-gray-100 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-100 rounded"></div>
-              <div className="h-4 bg-gray-100 rounded w-5/6"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        backgroundColor: "white",
+        gap: 2,
+      }}
+    >
+      <CircularProgress size={80} sx={{ color: "black" }} />
+      <Typography
+        variant="h6"
+        color="textSecondary"
+        sx={{ color: "text.secondary" }}
+      >
+        Loading, please wait...
+      </Typography>
+    </Box>
   );
 };
 
-export default loading;
+export default Loader;

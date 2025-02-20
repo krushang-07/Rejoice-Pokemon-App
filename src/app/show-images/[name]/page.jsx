@@ -20,8 +20,12 @@ export default async function ShowImages({ params }) {
   if (!images) return notFound();
 
   return (
-    <Box p={4} textAlign="center">
-      <Typography variant="h3" mb={4}>
+    <Box
+      p={4}
+      textAlign="center"
+      sx={{ backgroundColor: "white", height: "220vh", width: "100vw" }}
+    >
+      <Typography variant="h3" sx={{ color: "black" }} mb={4}>
         {name} Images
       </Typography>
       <Grid container spacing={3} justifyContent="center">

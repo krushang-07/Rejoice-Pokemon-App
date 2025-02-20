@@ -18,8 +18,8 @@ const MoveDetails = async ({ params }) => {
   if (!moveDetails) return notFound();
 
   return (
-    <Box p={4} textAlign="center">
-      <Typography variant="h4" mb={4} color="primary" fontWeight="bold">
+    <Box p={4} textAlign="center" bgcolor="white" minHeight="100vh">
+      <Typography variant="h4" mb={4} sx={{ color: "black" }} fontWeight="bold">
         Move Details
       </Typography>
       <Card
@@ -38,7 +38,7 @@ const MoveDetails = async ({ params }) => {
             <Typography
               variant="h6"
               component="span"
-              color="primary"
+              sx={{ color: "black" }}
               fontWeight="bold"
             >
               {moveDetails.name || "Not found"}

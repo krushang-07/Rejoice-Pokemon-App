@@ -1,47 +1,38 @@
-"use client";
-import useFetch from "@/hooks/useFetch";
-import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Box, Typography, Card, CardContent } from "@mui/material";
-import Loader from "@/app/pokemon/loading";
 
-const PokSpecies = () => {
-  const {
-    data: pokemonSpecies,
-    error,
-    loading,
-  } = useFetch("https://pokeapi.co/api/v2/pokemon-species");
-  const [pokemonSpeciesDetails, setPokemonSpeciesDetails] = useState({});
+const fetchPokemonData = async () => {
+  try {
+    const speciesResponse = await axios.get(
+      "https://pokeapi.co/api/v2/pokemon-species"
+    );
+    const speciesList = speciesResponse.data.results;
 
-  useEffect(() => {
-    const fetchAllPokemonDetails = async () => {
-      if (!pokemonSpecies || !pokemonSpecies.results) {
-        return <Typography>Loading Pokémon species...</Typography>;
-      }
+    const speciesDetails = await Promise.all(
+      speciesList.map(async (pokemon) => {
+        const detailsResponse = await axios.get(pokemon.url);
+        return {
+          name: pokemon.name,
+          color: detailsResponse.data.color.name,
+          eggGroup: detailsResponse.data.egg_groups[0]?.name || "Unknown",
+          genera: detailsResponse.data.genera[0]?.genus || "N/A",
+          generaLanguage:
+            detailsResponse.data.genera[0]?.language.name || "N/A",
+          growthRate: detailsResponse.data.growth_rate.name || "Unknown",
+        };
+      })
+    );
 
-      const details = {};
-      for (const pokemon of pokemonSpecies.results) {
-        try {
-          const response = await axios.get(pokemon.url);
-          details[pokemon.name] = {
-            color: response.data.color.name,
-            eggGroup: response.data.egg_groups[0]?.name || "Unknown",
-            genera: response.data.genera[0]?.genus || "N/A",
-            generaLanguage: response.data.genera[0]?.language.name || "N/A",
-            growthRate: response.data.growth_rate.name || "Unknown",
-          };
-        } catch (error) {
-          console.error("Error fetching Pokémon details:", error);
-        }
-      }
-      setPokemonSpeciesDetails(details);
-    };
+    return speciesDetails;
+  } catch (error) {
+    console.error("Error fetching Pokémon data:", error);
+    return [];
+  }
+};
 
-    fetchAllPokemonDetails();
-  }, [pokemonSpecies]);
+const PokSpecies = async () => {
+  const pokemonSpecies = await fetchPokemonData();
 
-  if (error) return <Typography color="error">{error.message}</Typography>;
-  if (loading) return <Loader />;
   return (
     <Box
       display="flex"
@@ -51,48 +42,49 @@ const PokSpecies = () => {
       maxWidth="1200px"
       mx="auto"
     >
-      {Object.entries(pokemonSpeciesDetails).map(([name, details]) => (
-        <Card
-          key={name}
-          sx={{
-            width: 260,
-            boxShadow: 4,
-            borderRadius: 3,
-            textAlign: "center",
-            p: 2,
-            background: `linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0.1)), ${details.color}`,
-            transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
-            "&:hover": {
-              transform: "scale(1.05)",
-              boxShadow: "6px 6px 15px rgba(0, 0, 0, 0.3)",
-            },
-          }}
-        >
-          <CardContent>
-            <Typography
-              variant="h6"
-              fontWeight="bold"
-              textTransform="uppercase"
-              gutterBottom
-            >
-              {name}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Color:</strong> {details.color}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Egg Group:</strong> {details.eggGroup}
-            </Typography>
-            <Typography variant="body2">
-              <strong>Genera:</strong> {details.genera} (
-              {details.generaLanguage})
-            </Typography>
-            <Typography variant="body2">
-              <strong>Growth Rate:</strong> {details.growthRate}
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
+      {pokemonSpecies.map(
+        ({ name, color, eggGroup, genera, generaLanguage, growthRate }) => (
+          <Card
+            key={name}
+            sx={{
+              width: 260,
+              boxShadow: 4,
+              borderRadius: 3,
+              textAlign: "center",
+              p: 2,
+              background: `linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0.1)), ${color}`,
+              transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
+              "&:hover": {
+                transform: "scale(1.05)",
+                boxShadow: "6px 6px 15px rgba(0, 0, 0, 0.3)",
+              },
+            }}
+          >
+            <CardContent>
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                textTransform="uppercase"
+                gutterBottom
+              >
+                {name}
+              </Typography>
+              <Typography variant="body2">
+                <strong>Color:</strong> {color}
+              </Typography>
+              <Typography variant="body2">
+                <strong>Egg Group:</strong> {eggGroup}
+              </Typography>
+              <Typography variant="body2">
+                <strong>Genera:</strong> {genera} ({generaLanguage})
+              </Typography>
+              <Typography variant="body2">
+                <strong>Growth Rate:</strong> {growthRate}
+              </Typography>
+            </CardContent>
+          </Card>
+        )
+      )}
     </Box>
   );
 };

@@ -9,11 +9,16 @@ const Loader = () => {
         justifyContent: "center",
         alignItems: "center",
         height: "100vh",
+        backgroundColor: "white",
         gap: 2,
       }}
     >
-      <CircularProgress size={80} color="primary" />
-      <Typography variant="h6" color="textSecondary">
+      <CircularProgress size={80} sx={{ color: "black" }} />
+      <Typography
+        variant="h6"
+        color="textSecondary"
+        sx={{ color: "text.secondary" }}
+      >
         Loading, please wait...
       </Typography>
     </Box>
