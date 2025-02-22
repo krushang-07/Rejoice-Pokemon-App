@@ -85,7 +85,7 @@ const PokCardDetail = ({ pokemonName }) => {
 
         <div className="relative h-64 bg-gray-50 border-b border-gray-200">
           <Image
-            src={pokemonDetails.image || "/placeholder.svg"}
+            src={pokemonDetails.image || "/placeholder.png"}
             alt={pokemonName}
             fill
             className="object-contain p-4"

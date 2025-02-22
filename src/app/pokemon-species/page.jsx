@@ -16,7 +16,6 @@ const page = () => {
         >
           Pokémon Species List
         </Typography>
-
         <PokSpecies />
       </Box>
     </div>

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Box, Typography, Card, CardContent } from "@mui/material";
 
 const fetchPokemonData = async () => {
   try {
@@ -34,58 +33,33 @@ const PokSpecies = async () => {
   const pokemonSpecies = await fetchPokemonData();
 
   return (
-    <Box
-      display="flex"
-      flexWrap="wrap"
-      justifyContent="center"
-      gap={3}
-      maxWidth="1200px"
-      mx="auto"
-    >
+    <div className="flex flex-wrap justify-center gap-3 max-w-5xl mx-auto">
       {pokemonSpecies.map(
         ({ name, color, eggGroup, genera, generaLanguage, growthRate }) => (
-          <Card
+          <div
             key={name}
-            sx={{
-              width: 260,
-              boxShadow: 4,
-              borderRadius: 3,
-              textAlign: "center",
-              p: 2,
+            className="w-64 shadow-lg rounded-lg text-center p-4 transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl"
+            style={{
               background: `linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(0, 0, 0, 0.1)), ${color}`,
-              transition: "transform 0.3s ease-in-out, box-shadow 0.3s",
-              "&:hover": {
-                transform: "scale(1.05)",
-                boxShadow: "6px 6px 15px rgba(0, 0, 0, 0.3)",
-              },
             }}
           >
-            <CardContent>
-              <Typography
-                variant="h6"
-                fontWeight="bold"
-                textTransform="uppercase"
-                gutterBottom
-              >
-                {name}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Color:</strong> {color}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Egg Group:</strong> {eggGroup}
-              </Typography>
-              <Typography variant="body2">
-                <strong>Genera:</strong> {genera} ({generaLanguage})
-              </Typography>
-              <Typography variant="body2">
-                <strong>Growth Rate:</strong> {growthRate}
-              </Typography>
-            </CardContent>
-          </Card>
+            <div className="font-bold text-lg uppercase mb-2">{name}</div>
+            <div className="text-sm">
+              <strong>Color:</strong> {color}
+            </div>
+            <div className="text-sm">
+              <strong>Egg Group:</strong> {eggGroup}
+            </div>
+            <div className="text-sm">
+              <strong>Genera:</strong> {genera} ({generaLanguage})
+            </div>
+            <div className="text-sm">
+              <strong>Growth Rate:</strong> {growthRate}
+            </div>
+          </div>
         )
       )}
-    </Box>
+    </div>
   );
 };
 

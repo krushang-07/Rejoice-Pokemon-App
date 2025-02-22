@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
       description: `Learn more about ${decodedPokemonName}, including stats, abilities, and moves.`,
       openGraph: {
         images: [
-          data.sprites.other?.dream_world?.front_default || "/placeholder.svg",
+          data.sprites.other?.dream_world?.front_default || "/placeholder.png",
         ],
       },
     };

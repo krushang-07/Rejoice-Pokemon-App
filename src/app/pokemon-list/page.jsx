@@ -1,7 +1,7 @@
 import dynamic from "next/dynamic";
 import { Box, Typography } from "@mui/material";
-import React, { Suspense } from "react";
-import Loader from "./loading";
+import React from "react";
+
 const PokList = dynamic(() => import("@/components/PokList"));
 
 const page = () => {
@@ -23,9 +23,8 @@ const page = () => {
         >
           Pokémon List
         </Typography>
-        <Suspense fallback={<Loader />}>
-          <PokList />
-        </Suspense>
+
+        <PokList />
       </Box>
     </div>
   );

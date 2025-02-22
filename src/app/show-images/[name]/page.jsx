@@ -30,7 +30,7 @@ export default async function ShowImages({ params }) {
             value &&
             typeof value === "string" && (
               <Grid item key={index} xs={12} sm={6} md={4} lg={3}>
-                <Card>
+                <Card sx={{ borderRadius: "50%" }}>
                   <CardContent>
                     <Image src={value} alt={key} width={400} height={400} />
                     <Typography
