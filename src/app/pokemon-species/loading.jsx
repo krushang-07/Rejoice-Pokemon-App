@@ -1,5 +1,4 @@
 import { CircularProgress, Box, Typography } from "@mui/material";
-
 const Loader = () => {
   return (
     <Box
