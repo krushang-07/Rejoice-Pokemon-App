@@ -20,6 +20,7 @@ export default function PokemonPage() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
+  const [additionalInfo, setAdditionalInfo] = useState("");
   const [displayedResponse, setDisplayedResponse] = useState("");
   const [thinking, setThinking] = useState(false);
   const [chatHistory, setChatHistory] = useState(() => {
@@ -36,6 +37,7 @@ export default function PokemonPage() {
     setLoading(true);
     setResponse("");
     setThinking(true);
+    setAdditionalInfo("");
 
     try {
       const res = await fetch("/api/pokemon", {
@@ -49,6 +51,7 @@ export default function PokemonPage() {
       const data = await res.json();
       setResponse(data.response);
       setImageUrl(data.imageUrl);
+      setAdditionalInfo(data.additionalData);
       const newChatHistory = [...chatHistory, { prompt }];
       setChatHistory(newChatHistory);
       localStorage.setItem("chatHistory", JSON.stringify(newChatHistory));
@@ -81,22 +84,22 @@ export default function PokemonPage() {
   }, [response]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-purple-900 to-indigo-900">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800">
       <div className="container mx-auto px-4 py-8 flex gap-8">
-        <div className="w-1/4 bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-6 space-y-6 h-screen overflow-y-auto border border-white/20">
-          <h2 className="text-2xl font-bold text-white/90 text-center">
+        <div className="w-1/4 bg-gray-900/50 backdrop-blur-lg rounded-3xl shadow-2xl p-6 space-y-6 h-screen overflow-y-auto border border-gray-700/30">
+          <h2 className="text-2xl font-bold text-gray-100 text-center">
             Chat History
           </h2>
           <div className="space-y-4">
             {chatHistory.map((chat, index) => (
               <div
                 key={index}
-                className="p-6 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm transition-all duration-300 hover:bg-white/10 hover:scale-105 cursor-pointer"
+                className="p-6 bg-gray-800/30 rounded-2xl border border-gray-700/30 backdrop-blur-sm transition-all duration-300 hover:bg-gray-800/50 hover:scale-105 cursor-pointer"
                 style={{
                   animation: `${fadeIn} 0.6s ease-out ${index * 0.1}s both`,
                 }}
               >
-                <p className="text-white/80 font-medium mb-2">{chat.prompt}</p>
+                <p className="text-gray-200 font-medium mb-2">{chat.prompt}</p>
                 {chat.imageUrl && (
                   <div className="flex justify-center mb-2">
                     <Image
@@ -108,7 +111,7 @@ export default function PokemonPage() {
                     />
                   </div>
                 )}
-                <p className="text-white/60 text-sm">{chat.response}</p>
+                <p className="text-gray-400 text-sm">{chat.response}</p>
               </div>
             ))}
           </div>
@@ -117,21 +120,21 @@ export default function PokemonPage() {
         <div className="w-3/4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-12">
-              <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 mb-4">
+              <h1 className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-gray-300 mb-4">
                 PokéAI
               </h1>
-              <p className="text-white/80 text-xl font-medium">
+              <p className="text-gray-300 text-xl font-medium">
                 Your AI-powered Pokémon encyclopedia
               </p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-white/20">
+            <div className="bg-gray-900/50 backdrop-blur-lg rounded-3xl shadow-2xl p-8 border border-gray-700/30">
               <div className="space-y-6">
                 <textarea
-                  className="w-full p-6 bg-white/5 border border-white/20 rounded-2xl
-                            focus:ring-2 focus:ring-purple-500 focus:border-purple-500
-                            transition-all duration-300 resize-none text-white/90
-                            placeholder:text-white/50 backdrop-blur-sm"
+                  className="w-full p-6 bg-gray-800/30 border border-gray-700/30 rounded-2xl
+                            focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+                            transition-all duration-300 resize-none text-gray-200
+                            placeholder:text-gray-500 backdrop-blur-sm"
                   rows={4}
                   placeholder="Ask about any Pokémon..."
                   value={prompt}
@@ -139,9 +142,9 @@ export default function PokemonPage() {
                 />
 
                 <button
-                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600
+                  className="w-full py-4 bg-gradient-to-r from-blue-600 to-blue-800
                             text-white font-semibold rounded-2xl shadow-lg
-                            hover:from-blue-700 hover:to-purple-700
+                            hover:from-blue-700 hover:to-blue-900
                             transition-all duration-300 transform hover:scale-[1.02]
                             disabled:from-gray-600 disabled:to-gray-700
                             disabled:cursor-not-allowed"
@@ -176,15 +179,15 @@ export default function PokemonPage() {
 
               {thinking && (
                 <div className="flex items-center gap-3 mt-6">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse" />
-                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse delay-100" />
-                  <div className="w-2 h-2 bg-indigo-500 rounded-full animate-pulse delay-200" />
+                  <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+                  <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse delay-100" />
+                  <div className="w-2 h-2 bg-blue-300 rounded-full animate-pulse delay-200" />
                 </div>
               )}
 
               {response && (
                 <div className="mt-8 animate-fade-in">
-                  <div className="bg-white/5 rounded-2xl p-8 border border-white/20 backdrop-blur-sm">
+                  <div className="bg-gray-800/30 rounded-2xl p-8 border border-gray-700/30 backdrop-blur-sm">
                     <div className="space-y-6">
                       {imageUrl && (
                         <div className="flex justify-center mb-6">
@@ -202,17 +205,59 @@ export default function PokemonPage() {
                           </div>
                         </div>
                       )}
+
                       <div className="flex justify-between items-start gap-4">
-                        <p className="text-white/90 whitespace-pre-wrap leading-relaxed flex-grow">
+                        <p className="text-gray-200 whitespace-pre-wrap leading-relaxed flex-grow">
                           {displayedResponse}
                         </p>
                         <button
                           onClick={handleCopy}
-                          className="text-white/60 hover:text-white/90 transition-colors duration-200"
+                          className="text-gray-400 hover:text-gray-200 transition-colors duration-200"
                         >
                           <ClipboardIcon className="h-6 w-6" />
                         </button>
                       </div>
+                      {additionalInfo && (
+                        <div className="bg-gray-800/40 p-4 rounded-2xl border border-gray-700/30">
+                          <h3 className="text-xl font-bold text-gray-200 mb-4">
+                            Additional Information:
+                          </h3>
+                          <table className="table-auto w-full text-gray-200">
+                            <tbody>
+                              <tr>
+                                <td className="font-bold">Type:</td>
+                                <td>{additionalInfo.type.join(", ")}</td>
+                              </tr>
+                              <tr>
+                                <td className="font-bold">Abilities:</td>
+                                <td>{additionalInfo.abilities.join(", ")}</td>
+                              </tr>
+                              <tr>
+                                <td className="font-bold">Height:</td>
+                                <td>{additionalInfo.height}</td>
+                              </tr>
+                              <tr>
+                                <td className="font-bold">Weight:</td>
+                                <td>{additionalInfo.weight}</td>
+                              </tr>
+                              <tr>
+                                <td className="font-bold">Base Stats:</td>
+                                <td>
+                                  <ul>
+                                    {additionalInfo.baseStats.map(
+                                      (stat, index) => (
+                                        <li key={index}>
+                                          {stat.name}: {stat.value}
+                                        </li>
+                                      )
+                                    )}
+                                  </ul>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

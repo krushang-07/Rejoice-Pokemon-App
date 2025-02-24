@@ -1,6 +1,8 @@
 import { OpenAI } from "openai";
+
 import {
   extractPokemonName,
+  fetchPokemonDetails,
   fetchPokemonImage,
 } from "../../../helper/chatHelper";
 
@@ -26,23 +28,27 @@ export async function POST(req) {
         {
           role: "system",
           content:
-            "You are a knowledgeable Pokémon expert. Provide clear, accurate, and engaging information about Pokémon. Your responses should include details such as type, abilities, evolution chains, notable moves, game appearances, and interesting facts. Present all details concisely in a structured tabular format without using markdown or extra formatting and also if you can support multiple language like hindi english etc all type of language and additionally support pikachu language also.",
+            "You are a knowledgeable Pokémon expert. Provide clear, accurate, and engaging information about Pokémon. Your responses should include details such as type, abilities, evolution chains, notable moves, game appearances, and interesting facts. Present all details concisely in a structured tabular format without using markdown or extra formatting and also if you can support multiple languages like Hindi, English, etc., and additionally support Pikachu language also.",
         },
         { role: "user", content: prompt },
       ],
       max_tokens: 1000,
+      temperature: 0.6,
     });
 
     const pokemonName = extractPokemonName(
       response.choices[0]?.message?.content
     );
+
     const imageUrl = await fetchPokemonImage(pokemonName);
+    const pokemonData = await fetchPokemonDetails(pokemonName);
 
     return new Response(
       JSON.stringify({
         response:
           response.choices[0]?.message?.content || "No response from OpenAI.",
         imageUrl,
+        additionalData: pokemonData,
       }),
       { status: 200 }
     );

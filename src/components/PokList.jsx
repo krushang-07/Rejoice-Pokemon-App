@@ -37,7 +37,6 @@ const PokList = () => {
 
   useEffect(() => {
     setIsMounted(true);
-    console.log("mounted");
   }, []);
 
   const fetchAllPokemonDetails = async () => {
@@ -47,7 +46,6 @@ const PokList = () => {
       pokemonData.results.map(async (pokemon) => {
         try {
           const response = await axios.get(pokemon.url);
-          console.log(response.data);
           const types = response.data.types.map(
             (typeInfo) => typeInfo.type.name
           );

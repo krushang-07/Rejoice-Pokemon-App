@@ -7,11 +7,15 @@ import Loader from "./loading";
 const page = () => {
   return (
     <div>
-      <Box p={4} bgcolor="#f4f4f4" minHeight="100vh">
+      <Box
+        p={4}
+        className="bg-gradient-to-br from-gray-900 via-blue-900 to-gray-800  transition-all duration-300 shadow-lg hover:shadow-blue-500/40 transform hover:-translate-y-1"
+        minHeight="100vh"
+      >
         <Typography
           variant="h3"
           align="center"
-          sx={{ color: "black" }}
+          sx={{ color: "white" }}
           gutterBottom
           fontWeight="bold"
         >

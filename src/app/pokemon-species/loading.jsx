@@ -11,12 +11,8 @@ const Loader = () => {
         gap: 2,
       }}
     >
-      <CircularProgress size={80} sx={{ color: "black" }} />
-      <Typography
-        variant="h6"
-        color="textSecondary"
-        sx={{ color: "text.secondary" }}
-      >
+      <CircularProgress size={80} sx={{ color: "white" }} />
+      <Typography variant="h6" sx={{ color: "white" }}>
         Pokemon Species Detail is Loading, please wait...
       </Typography>
     </Box>
