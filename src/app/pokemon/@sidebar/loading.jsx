@@ -21,7 +21,7 @@ const Loader = () => {
         color="textSecondary"
         sx={{ color: "text.secondary" }}
       >
-        Move Detail is Loading, please wait...
+        PokeAI is Loading, please wait...
       </Typography>
     </Box>
   );

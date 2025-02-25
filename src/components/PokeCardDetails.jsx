@@ -5,6 +5,8 @@ import axios from "axios";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import { CircularProgress, Typography, Box } from "@mui/material";
+
 const typeColors = {
   normal: "#A8A878",
   fire: "#FF4422",
@@ -44,6 +46,7 @@ const PokCardDetail = ({ pokemonName }) => {
         );
         setPokemonDetails({
           abilities: response.data.abilities,
+
           types: response.data.types,
           image: response.data.sprites.other?.dream_world?.front_default,
           height: response.data.height / 10,
