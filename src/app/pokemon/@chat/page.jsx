@@ -54,7 +54,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (response) {
-      let index = 0;
+      let index = -1;
       const interval = setInterval(() => {
         setDisplayedResponse((prev) => prev + response[index]);
         index++;
@@ -99,7 +99,7 @@ export default function Chat() {
 
         {response && (
           <div className="mt-8">
-            <div className="bg-gray-800/30 rounded-2xl p-8">
+            <div className="bg-gray-800/30 rounded-2xl p-4">
               {imageUrl && (
                 <div className="flex justify-center mb-6">
                   <Image
@@ -110,7 +110,7 @@ export default function Chat() {
                   />
                 </div>
               )}
-              <p className="text-gray-200 whitespace-pre-wrap">
+              <p className="text-gray-200 whitespace-pre-wrap ">
                 {displayedResponse}
               </p>
               <button

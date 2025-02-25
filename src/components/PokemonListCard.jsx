@@ -228,7 +228,7 @@ const PokemonListCard = ({ pokemonDetails, selectedTypes, sortOrder }) => {
                     },
                   }}
                 >
-                  View Gallery
+                  View {pokemonName}'s Gallery
                 </Button>
               </CardContent>
             </Card>

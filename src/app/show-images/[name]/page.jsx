@@ -30,7 +30,6 @@ export default async function ShowImages({ params }) {
         px: { xs: 2, sm: 4 },
       }}
     >
-      {/* Background Pattern */}
       <Box
         sx={{
           position: "absolute",
